@@ -1,0 +1,144 @@
+---
+title: "DS2 HW3"
+author: "John Neeld"
+format: docx
+execute:
+  message: false
+  warning: false
+  echo: true
+editor: 
+  markdown: 
+    wrap: sentence
+---
+
+The `babynames` dataset in the `babynames` packages contains all births in the U.S. from 1880 to 2015 in which there were at least 5 births of that *sex-name* dyad in that year.
+(A "dyad" is a combination of two variables, "triad" is three, etc.)
+
+Create a dataset called `babynames_total` that totals `births` across all years.
+(Note: The case in the new dataset should be `sex` and `name`, which means that each of these dyads should appear only once in the dataset.)
+
+Use this dataset to calculate what is asked below:
+
+```{r setup, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(babynames)
+library(tinytex)
+```
+
+## 1) 10 most popular names
+
+```{r}
+babynames_total <- babynames |> 
+  select(sex,name, n) |> 
+  group_by(sex,name) |> 
+  summarise(births = sum(n),
+            .groups = "drop")
+
+babynames_total |> 
+  arrange(desc(births)) |> 
+  head(10)
+```
+
+James, John, Robert, Michael, Mary, William, David, Joseph, Richard, and Charles are the 10 most popular names.
+
+## 2) Least popular names
+
+```{r}
+babynames_total |> 
+  arrange(births)
+
+babynames_total |> 
+  count(births)
+```
+
+a.  What is the smallest value of `births` in the dataset?
+    a.  **The smalles value of births in the dataset is 5.**
+b.  How many *sex-name* have that many births?
+    a.  **There are 15477 sex-name that have 5 births.**
+c.  Based on the way the data were assembled, explain why there are so many.
+    a.  **I believe that it was because people accidentally spelled the name, they intended to write, wrong on the birth certificate.**
+
+## 3) 10 most popular [boys']{.underline} names that end in a vowel
+
+```{r}
+bnt_vowel <- babynames_total |> 
+  mutate(last_char = str_sub(name, -1, -1),
+         vowelend = last_char %in% c("a", "e", "i", "o", "u"))
+  
+bnt_vowel |> 
+  filter(sex == "M") |> 
+  filter(vowelend == TRUE) |> 
+  arrange(desc(births)) |> 
+  head(10)
+```
+
+George, Joshua, Jose, Kyle, Lawrence, Joe, Willie, Jesse, Bruce, and Eugene are the 10 most popular boys' names that end in a vowel.
+
+## 4) 10 most popular [girls']{.underline} names with joe/jo suffix
+
+Find the 10 most popular girls' names that end in "joe" or "jo", excluding the names "Joe", and "Jo".
+For this, problem, you should include all spellings, whether or not they are capitalized (so, for example, "Mary Jo" counts as ending in "jo")
+
+```{r}
+babynames_total |> 
+  filter(sex == "F") |> 
+  mutate(jos = name |> str_sub(-3) |> str_count("joe"),
+         jos = name |> str_sub(-2) |> str_count("jo")) |> 
+  filter(jos > 0) |> 
+  arrange(desc(births)) |> 
+  head(10)
+
+```
+
+Mary Jo, Billie Jo, Mari Jo, Bobbi Jo, Bobbie Jo, Betty Jo, Amy Jo, Samantha Jo, Mar Jo, and Kelly Jo are the 10 most popular girls' names with a joe/jo suffix.
+
+## 5) Allnameslikethis
+
+Did we need to worry about case in the last problem?
+To answer this, verify the following:
+
+a.  There are no spaces in any names
+
+```{r}
+babynames_total |> 
+  as.data.frame() |> 
+  mutate(sp = str_detect(name, " ")) |> 
+  count(sp)
+```
+
+a.  The first letter is always capitalized
+
+```{r}
+babynames_total |> 
+  mutate(cap = name |> str_sub(1,1) |> str_count("[abcdefghijklmnopqrstuvwxyz]")) |> 
+  count(cap)
+```
+
+a.  No other letters are capitalized
+
+```{r}
+babynames_total |> 
+  mutate(cap = name |> str_sub(2) |> str_count("[ABCDEFGHIJKLMNOPQRSTUVWXYZ]")) |> 
+  count(cap)
+```
+
+#### The problems below are optional, since they are not working with text, but I thought they provided an interesting challenge.
+
+## 6) Closest to the average (optional)
+
+Calculate the average number of births by *sex-name*.
+Which *sex-name* is closest to that number?
+Do this algorithmically in one pipeline, meaning no saving any objects and no typing in the average yourself.
+
+```{r}
+
+```
+
+## 7) 10 most common cross-sex names (optional)
+
+Show the most common names that are given both to males and to females.
+You will have to make a decision about how to quantify this - I recommend not looking just at total births (male + female).
+
+```{r}
+
+```
