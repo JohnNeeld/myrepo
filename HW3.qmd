@@ -52,10 +52,17 @@ babynames_total |>
 ```
 
 a.  What is the smallest value of `births` in the dataset?
-    a.  **The smalles value of births in the dataset is 5.**
+
+    *JOE: Fixed a small typo*
+
+    a.  **The smallest value of births in the dataset is 5.**
+
 b.  How many *sex-name* have that many births?
+
     a.  **There are 15477 sex-name that have 5 births.**
+
 c.  Based on the way the data were assembled, explain why there are so many.
+
     a.  **I believe that it was because people accidentally spelled the name, they intended to write, wrong on the birth certificate.**
 
 ## 3) 10 most popular [boys']{.underline} names that end in a vowel
@@ -73,6 +80,8 @@ bnt_vowel |>
 ```
 
 George, Joshua, Jose, Kyle, Lawrence, Joe, Willie, Jesse, Bruce, and Eugene are the 10 most popular boys' names that end in a vowel.
+
+*JOE: I like that you included the important output from the code as text that doesn't rely on the code itself. Redundancy is often a good thing when programming.*
 
 ## 4) 10 most popular [girls']{.underline} names with joe/jo suffix
 
@@ -97,6 +106,8 @@ Mary Jo, Billie Jo, Mari Jo, Bobbi Jo, Bobbie Jo, Betty Jo, Amy Jo, Samantha Jo,
 Did we need to worry about case in the last problem?
 To answer this, verify the following:
 
+*JOE: Changed the alphanumeric markers from "a, a, a"* *to "a, b, c"*
+
 a.  There are no spaces in any names
 
 ```{r}
@@ -106,19 +117,20 @@ babynames_total |>
   count(sp)
 ```
 
-a.  The first letter is always capitalized
+b.  The first letter is always capitalized
 
 ```{r}
 babynames_total |> 
-  mutate(cap = name |> str_sub(1,1) |> str_count("[abcdefghijklmnopqrstuvwxyz]")) |> 
+  mutate(cap = name |> str_sub(1,1) |> str_count("[a-z]")) |> 
   count(cap)
 ```
 
-a.  No other letters are capitalized
+c.  No other letters are capitalized
 
 ```{r}
 babynames_total |> 
-  mutate(cap = name |> str_sub(2) |> str_count("[ABCDEFGHIJKLMNOPQRSTUVWXYZ]")) |> 
+  # JOE: Shorthand for listing the whole alphabet is 'A-Z', saves time; also did it in b's block above
+  mutate(cap = name |> str_sub(2) |> str_count("[A-Z]")) |> 
   count(cap)
 ```
 
