@@ -53,8 +53,6 @@ babynames_total |>
 
 a.  What is the smallest value of `births` in the dataset?
 
-    *JOE: Fixed a small typo*
-
     a.  **The smallest value of births in the dataset is 5.**
 
 b.  How many *sex-name* have that many births?
@@ -81,7 +79,6 @@ bnt_vowel |>
 
 George, Joshua, Jose, Kyle, Lawrence, Joe, Willie, Jesse, Bruce, and Eugene are the 10 most popular boys' names that end in a vowel.
 
-*JOE: I like that you included the important output from the code as text that doesn't rely on the code itself. Redundancy is often a good thing when programming.*
 
 ## 4) 10 most popular [girls']{.underline} names with joe/jo suffix
 
@@ -106,7 +103,6 @@ Mary Jo, Billie Jo, Mari Jo, Bobbi Jo, Bobbie Jo, Betty Jo, Amy Jo, Samantha Jo,
 Did we need to worry about case in the last problem?
 To answer this, verify the following:
 
-*JOE: Changed the alphanumeric markers from "a, a, a"* *to "a, b, c"*
 
 a.  There are no spaces in any names
 
@@ -129,7 +125,6 @@ c.  No other letters are capitalized
 
 ```{r}
 babynames_total |> 
-  # JOE: Shorthand for listing the whole alphabet is 'A-Z', saves time; also did it in b's block above
   mutate(cap = name |> str_sub(2) |> str_count("[A-Z]")) |> 
   count(cap)
 ```
